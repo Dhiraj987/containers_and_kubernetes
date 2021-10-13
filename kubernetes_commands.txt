@@ -1,25 +1,35 @@
 Most used commands in kubernetes:
 
-kubectl cli → for configuring the minikube machine
-minikube cli → for start up/ deleting the cluster
+kubectl cli     → for configuring the minikube machine
+minikube cli    → for start up/ deleting the cluster
 
-minikube start --driver=docker → starts a minikube (virtual box) running on the docker engine
-minikube status → returns the status of the minikube
-minikube delete → deletes the minikube and everything that resides within
 
-kubectl create deployment <name-of-the-deployment> --image=<name-of-the-image> [option1] [option2] → creates a deployment with specified name from specified image
-kubectl create -h  → prints the help for the create section of kubectl
+minikube start --driver=docker  → starts a minikube (virtual box) running on the docker engine
+minikube status     → returns the status of the minikube
+minikube delete     → deletes the minikube and everything that resides within
 
-kubectl edit deployment → edits the deployment config file 
+
+kubectl create deployment <name-of-the-deployment> --image=<name-of-the-image> [option1] [option2]  
+                        → creates a deployment with specified name from specified image
+kubectl create -h   → prints the help for the create section of kubectl
+kubectl create -f config_file.yaml  → takes the config file and creates a deployment
+kubectl apply -f config_file.yaml   → takes the config file and creates the deployment (creates and replaces-- updates)
+kubectl delete -f config_file.yaml      → deletes the config file
+
+kubectl edit deployment → edits the deployment config file, once this is done the K8 engine takes 
+                                care of the changes
+
 
 kubectl get pods → return the status of the pod within the minikube server 
 kubectl get services → does the same but for services
 kubectl get deployment → does the same but for deployment
 kubectl get replicaset → does the same but for replicaset
 
+
 kubectl logs <pod-name> → returns the log of the specific pod
 kubectl exec -it <pod-name> --bin/bash → opens an interactive window on the specified pod
 kubectl describe pod <pod-name> → describes the status of the pod
   
+
 kubectl delete pod <pod-name> → deletes the pod-- not helpful because the engine will start another one ASAP
 kubectl delete deployment <deployment-name> → deletes the specified deployment
