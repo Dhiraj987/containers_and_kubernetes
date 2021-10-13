@@ -23,5 +23,3 @@ kubectl describe pod <pod-name> → describes the status of the pod
   
 kubectl delete pod <pod-name> → deletes the pod-- not helpful because the engine will start another one ASAP
 kubectl delete deployment <deployment-name> → deletes the specified deployment
-
-

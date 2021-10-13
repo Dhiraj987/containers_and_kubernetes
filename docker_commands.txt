@@ -1,0 +1,30 @@
+commonly used commands in docker container 
+
+docker built -t image_name .    → from the docker file in the . (current directory) builds an image 
+                                        and names it image_name
+docker built -t image_name:v1 .     → from the dockerfile at the current directory, builds an image 
+                                            an tags it with v1
+docker image tag image_name image_name:new_tag    → takes an already built image and attaches the
+                                                        new_tag to it
+docker image tag image_id image_name:new_tag     → does the same as above but with the image_id
+
+
+docker container ls -a      → lists all the container in the docker engine
+docker image ls -a      → lists all the images in the docker engine
+docker ps   → lists all the active process in the docker engine
+docker ps -a    → lists all the process in the engine, active or inactive 
+
+
+docker run -it image_name     → takes the image and runs it as a container on interactive window
+                                    -it here stands for interactive
+docker run image_name       → runs the image as container-- not in interactive window
+
+docker start -i container_id        → starts the existing container with con_id in interactive window
+
+
+docker image prune      → all the dangled images are removed, helpful to save memory
+docker container prune      → all the tangling containers are removed, helpful again
+
+
+docker rmi image_id      → to delete an image
+docker rm container_id      → to delete a container
