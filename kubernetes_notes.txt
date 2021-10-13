@@ -1,0 +1,35 @@
+In kubernetes, all we need to do is--
+
+1. Start the cluster using minikube
+2. Start a deployment-- it takes care of almost everything from creating pods to creating replica sets. 
+        In practice, we don’t manually create pods, the kubectl takes care of that while creating deployment.
+             (deployment is an abstraction level over the pod and pod is an abstraction level for container)
+
+
+Command to create a deployment:
+
+kubectl create deployment name-of-the-pod --image=image-name
+this is Blueprint for creating pods 
+this is the most basic configuration for deployment (name and image to use)
+in this Everything else is set to default
+
+-- we don’t need to manually start replicaset, deployment takes care of that; it always start two copies of the pod 
+        to decrease chances of downtime
+-- in deployment we can completely configure the blueprint of the pod (we can also specify the number of pod to be created)
+
+
+kubectl apply -f config_file.yaml is best way to run or create an object in kuberenetes
+        it updates and does all the things needed to reach the defined desired state.
+
+Deployment name: nginx-depl
+Replicaset name: nginx-depl-96979c6b8
+Pod name: nginx-depl-96979c6b8-nfpwp
+
+
+To edit the deployment, we do 
+kubectl edit deployment
+It opens a vim editor and we can make edits and save them. Once we save them, the engine works to replace the old pod with new one
+(i to get to insert mode; esc to get to executive command mode and then :w to write and :q to exit || :wq for both at once)
+
+
+
