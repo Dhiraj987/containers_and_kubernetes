@@ -1,21 +1,53 @@
+                                                Kuberenetes
+
+As the containerization increased, managing 100s and 1000s of containers with scripts was
+very difficult. To solve this, google created Kuberenetes.
+
+Kuberenetes is simply a container orchestration tool that offers
+                                - high availability or reduced downtime  
+                                - Scalability or high performance
+                                - Disaster recovery or backup and restore
+
+A deployment of kuberenetes is called cluster.
+
+Nodes are working physical or virtual machines in kuberenetes. They are managed by control
+ panel.
+
+                                KUBERENETES OBJECTS
+These are persistent entities in kuberenetes. Once a user defines an object, K8s works to 
+maintain it.
+
+
+                                        PODS
+These are the simplest units in Kuberenetes
+They encapsulate a container or multiple containers, they are a level of abstraction
+Creating their replicas serves to scale up an application horizontally
+
+Each pod gets a service (permanent IP address) that they use to communicate with one another. 
+
+
 In kubernetes, all we need to do is--
 
 1. Start the cluster using minikube
-2. Start a deployment-- it takes care of almost everything from creating pods to creating replica sets. 
-        In practice, we don’t manually create pods, the kubectl takes care of that while creating deployment.
-             (deployment is an abstraction level over the pod and pod is an abstraction level for container)
+2. Start a deployment-- it takes care of almost everything from creating pods to creating
+                         replica sets. 
+        In practice, we don’t manually create pods, the kubectl takes care of that while 
+                                creating deployment.
+             (deployment is an abstraction level over the pod and pod is an abstraction
+                                         level for container)
 
 
-Command to create a deployment:
+                                Command to create a deployment:
 
-kubectl create deployment name-of-the-pod --image=image-name
+        kubectl create deployment name-of-the-pod --image=image-name
 this is Blueprint for creating pods 
 this is the most basic configuration for deployment (name and image to use)
 in this Everything else is set to default
 
--- we don’t need to manually start replicaset, deployment takes care of that; it always start two copies of the pod 
-        to decrease chances of downtime
--- in deployment we can completely configure the blueprint of the pod (we can also specify the number of pod to be created)
+-- we don’t need to manually start replicaset, deployment takes care of that; it always 
+                start two copies of the pod to decrease chances of downtime
+-- in deployment we can completely configure the blueprint of the pod (we can also 
+                specify the number of pod to be created)
 
 
 kubectl apply -f config_file.yaml is best way to run or create an object in kuberenetes
@@ -28,8 +60,53 @@ Pod name: nginx-depl-96979c6b8-nfpwp
 
 To edit the deployment, we do 
 kubectl edit deployment
-It opens a vim editor and we can make edits and save them. Once we save them, the engine works to replace the old pod with new one
-(i to get to insert mode; esc to get to executive command mode and then :w to write and :q to exit || :wq for both at once)
+It opens a vim editor and we can make edits and save them. Once we save them, the engine 
+        works to replace the old pod with new one
+(i to get to insert mode; esc to get to executive command mode and then :w to write and :q 
+                to exit || :wq for both at once)
+
+
+
+                                ReplicaSet
+Replicates pods for redundancy
+Maintains desired state
+It helps us scale application to meet demands and decrease down-time
+
+When we create a deployment, K8s creates at least one replicas of it. (and more if we specify it)
+        kubectl scale deploy deployment_name --replicas=3
+
+We can manually create ReplicaSet by specifying kind: replicaset in the config yaml file
+
+once we specify the no. of objects in kubernetes, kubernetes works to maintain that at all time, 
+the same applies with replica sets
+
+
+                                Autoscaling 
+Horizontal Pod Autoscaler (HPA) enables automatic scaling up and scaling down as needed.
+It can configure on desired state of CPU, memory, etc.
+                        command for autoscale deployment- 
+     kubectl autoscale deploy deployment_name --min=2 --max=5 --cpu-percentage=10
+we can also set minReplicas, maxReplicas and targetCPUUtilizationPercentage in the yaml config file
+
+-- Both replicaSet and AutoScaling are important to minimize downtime and service interruptions
+
+
+                Rolling updates
+
+- Rolling updates are a way to roll out app changes in an automated and controlled fashion throughout 
+        your pods
+- It also allows for rollback when something goes wrong.
+
+Step 1 to adding Rolling updates - add liveness and readiness probes to your deployments. This ensures
+        deployments are marked ready appropriately
+Step 2 to  adding Rolling updates - add a rolling update strategy to the yaml config file
+        sth like:-          strategy:
+                                type: RollingUpdate
+                                rollingUpdate:
+                                        maxUnavailable: 50%       (50% most be available)
+                                        maxSurge: 2               (there can only be 2 extra
+                                                replicas of pod than defined in the config file
+
 
 
 

@@ -33,3 +33,10 @@ kubectl describe pod <pod-name> → describes the status of the pod
 
 kubectl delete pod <pod-name> → deletes the pod-- not helpful because the engine will start another one ASAP
 kubectl delete deployment <deployment-name> → deletes the specified deployment
+
+
+kubectl config get-clusters
+
+
+kubectl expose deployment/hello-world  → exposes the pod to the internet
+curl -L localhost:8001/api/v1/namespaces/sn-labs-$USERNAME/services/hello-world/proxy
