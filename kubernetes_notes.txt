@@ -1,25 +1,25 @@
-                                                Kuberenetes
+                                                kubernetes
 
 As the containerization increased, managing 100s and 1000s of containers with scripts was
-very difficult. To solve this, google created Kuberenetes.
+very difficult. To solve this, google created kubernetes.
 
-Kuberenetes is simply a container orchestration tool that offers
+kubernetes is simply a container orchestration tool that offers
                                 - high availability or reduced downtime  
                                 - Scalability or high performance
                                 - Disaster recovery or backup and restore
 
-A deployment of kuberenetes is called cluster.
+A deployment of kubernetes is called cluster.
 
-Nodes are working physical or virtual machines in kuberenetes. They are managed by control
+Nodes are working physical or virtual machines in kubernetes. They are managed by control
  panel.
 
-                                KUBERENETES OBJECTS
-These are persistent entities in kuberenetes. Once a user defines an object, K8s works to 
+                                kubernetes OBJECTS
+These are persistent entities in kubernetes. Once a user defines an object, K8s works to 
 maintain it.
 
 
                                         PODS
-These are the simplest units in Kuberenetes
+These are the simplest units in kubernetes
 They encapsulate a container or multiple containers, they are a level of abstraction
 Creating their replicas serves to scale up an application horizontally
 
@@ -50,7 +50,7 @@ in this Everything else is set to default
                 specify the number of pod to be created)
 
 
-kubectl apply -f config_file.yaml is best way to run or create an object in kuberenetes
+kubectl apply -f config_file.yaml is best way to run or create an object in kubernetes
         it updates and does all the things needed to reach the defined desired state.
 
 Deployment name: nginx-depl
@@ -94,19 +94,128 @@ we can also set minReplicas, maxReplicas and targetCPUUtilizationPercentage in t
                 Rolling updates
 
 - Rolling updates are a way to roll out app changes in an automated and controlled fashion throughout 
-        your pods
+        your pods, users can always access the app as rolling updates takes care of everything else
 - It also allows for rollback when something goes wrong.
 
 Step 1 to adding Rolling updates - add liveness and readiness probes to your deployments. This ensures
         deployments are marked ready appropriately
 Step 2 to  adding Rolling updates - add a rolling update strategy to the yaml config file
-        sth like:-          strategy:
+        sth like:-          strategy: 
                                 type: RollingUpdate
                                 rollingUpdate:
                                         maxUnavailable: 50%       (50% most be available)
                                         maxSurge: 2               (there can only be 2 extra
                                                 replicas of pod than defined in the config file
 
+d 
+docker built -t hello_kubernetes .  → creates an image from a dockerfile at the current directory and 
+                        names it hello_kubernetes
+docker tag hello_kubernetes upkar/hello_kubernetes:2.0                  → applies the new tag to the image
+
+docker push upkar/deployment_name:2.0                   → pushes the image to docker registry
+
+kubectl set image deployments/deployment_name deployment_name=upkar/de
+
+kubectl rollout status deployments/deployment_name      → returns the status of the rollout
+
+if the rollout needs to be backed down, rolling updates provides us with an opportunity to do that as 
+well.
+        kubectl rollout undo deployments/deployment_name
+
+
+                Config maps and Secrets
+
+We avoid hardcoded configuration variables, in docker and kubernetes we do so via 
+config maps and secrets  (Account ID, passwords, API keys)
+
+-- We use config maps to provide configuration for deployments
+-- They can be reused across deployments
+-- To create config maps, we can 
+        - use string literals
+        - Use key value pairs
+        - use a config map yaml descriptive file
+
+secrets do the same but are used for sensitive information 
+
+config maps and secrets are used by deployments just before they are run
+
+command
+
+        kubectl create configmap my-config --from-literal=MESSAGE='hello from the config map'
+
+in the config yaml file-
+
+env: 
+  -name:MESSAGE
+  valuefrom:
+    configMapKeyRef:
+        name:my-config
+        key:MESSAGE
+
+
+        kubectl get configmaps/secrets
+        kubectl describe configmap/secrets configmap_name
 
 
 
+Step 1: create a secret or config map
+Step 2: check if it was actually created
+Step 3: (we can also use the describe command to look into the file)
+Step 4: add the the config map/ secret in the deployment descriptor 
+                or the config file
+
+
+                
+
+IN GENERAL-
+1. create a dockerfile
+2. crate an image out of it
+3. create a config yaml file for deployment 
+4. use the yaml to create deployment
+
+
+To expose/ access the application for use
+kubectl expose deployment/deployment_name
+
+Cluster IPs are only accessible within the cluster. To make this externally accessible, 
+we can create a proxy. this is not how you would make an application externally accessible in a production 
+scenario. the command below 
+
+kubectl proxy
+
+This command doesn't terminate until you terminate it. Keep it running so that you can continue to access your app.
+
+In the original terminal window, ping the application to get a response.
+
+curl -L localhost:8001/api/v1/namespaces/sn-labs-$USERNAME/services/hello-world/proxy
+
+
+In real-world situations, load on an application can vary over time. If our application begins experiencing heightened load, we want to scale it up to accommodate that load. There is a simple kubectl command for scaling.
+
+Use the scale command to scale up your Deployment. Make sure to run this in the terminal window that is not running the proxy command.
+
+kubectl scale deployment hello-world --replicas=3
+
+
+for i in `seq 10`; do curl -L localhost:8001/api/v1/namespaces/sn-labs-$USERNAME/services/hello-world/proxy; done
+
+
+Perform rolling updates
+Rolling updates are an easy way to update our application in an automated and controlled fashion. To simulate an update, let's first build a new version of our application and push it to Container Registry.
+
+kubectl set image deployment/hello-world hello-world=us.icr.io/$MY_NAMESPACE/hello-world:2
+
+Get a status of the rolling update by using the following command:
+kubectl rollout status deployment/hello-world
+
+You can also get the Deployment with the wide option to see that the new tag is used for the image.
+kubectl get deployments -o wide
+
+
+
+                The Kubernetes Ecosystem
+
+"Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services
+that facilitates both declarative configuration and automation. It has large, rapidly growing ecosystem. Kubernetes
+services, support and tools are widely available" -Kubernetes Documentation
+ 
