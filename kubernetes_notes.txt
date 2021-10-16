@@ -179,43 +179,53 @@ kubectl expose deployment/deployment_name
 
 Cluster IPs are only accessible within the cluster. To make this externally accessible, 
 we can create a proxy. this is not how you would make an application externally accessible in a production 
-scenario. the command below 
-
+scenario.
 kubectl proxy
 
-This command doesn't terminate until you terminate it. Keep it running so that you can continue to access your app.
-
-In the original terminal window, ping the application to get a response.
-
+the command below pings the application to get a response.
 curl -L localhost:8001/api/v1/namespaces/sn-labs-$USERNAME/services/hello-world/proxy
 
 
-In real-world situations, load on an application can vary over time. If our application begins experiencing heightened load, we want to scale it up to accommodate that load. There is a simple kubectl command for scaling.
-
-Use the scale command to scale up your Deployment. Make sure to run this in the terminal window that is not running the proxy command.
-
+the command below can be used to scale up the Deployment
 kubectl scale deployment hello-world --replicas=3
 
 
-for i in `seq 10`; do curl -L localhost:8001/api/v1/namespaces/sn-labs-$USERNAME/services/hello-world/proxy; done
+for i in `seq 10`; do curl -L localhost:8001/api/v1/namespaces/services/hello-world/proxy; done
 
 
 Perform rolling updates
-Rolling updates are an easy way to update our application in an automated and controlled fashion. To simulate an update, let's first build a new version of our application and push it to Container Registry.
+let's first build a new version of our application and push it to Container Registry.
 
 kubectl set image deployment/hello-world hello-world=us.icr.io/$MY_NAMESPACE/hello-world:2
 
-Get a status of the rolling update by using the following command:
+command to getting the status of the rolling update
 kubectl rollout status deployment/hello-world
 
-You can also get the Deployment with the wide option to see that the new tag is used for the image.
+the command to get more (wide) details for a  Deployment
 kubectl get deployments -o wide
 
 
-
-                The Kubernetes Ecosystem
+                                The Kubernetes Ecosystem
 
 "Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services
 that facilitates both declarative configuration and automation. It has large, rapidly growing ecosystem. Kubernetes
 services, support and tools are widely available" -Kubernetes Documentation
- 
+
+things that Kubernetes alone doesn't provide- 
+        - building container images
+        - storing images in a container registry 
+        - logging
+        - monitoring
+        - Continuous Integration and Continuos Deployment
+
+BIG PICTURE From Cloud Native (cncf.io) Trail Map :- 
+1. Containerize the app
+2. CI/CD 
+3. orchestration and application definition
+4. observation and analysis
+5. service proxy, discovery and mesh
+6. networking, policy and security
+7. Distributed database and storage
+8. streaming and messaging
+9. container registry and runtime
+10. Software Distribution
