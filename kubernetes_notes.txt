@@ -165,7 +165,7 @@ Step 4: add the the config map/ secret in the deployment descriptor
                 or the config file
 
 
-                
+------------------------------------------------------------------------------------------                
 
 IN GENERAL-
 1. create a dockerfile
@@ -173,13 +173,14 @@ IN GENERAL-
 3. create a config yaml file for deployment 
 4. use the yaml to create deployment
 
+------------------------------------------------------------------------------------------
 
 To expose/ access the application for use
 kubectl expose deployment/deployment_name
 
 Cluster IPs are only accessible within the cluster. To make this externally accessible, 
-we can create a proxy. this is not how you would make an application externally accessible in a production 
-scenario.
+we can create a proxy. this is not how you would make an application externally accessible 
+in a production scenario.
 kubectl proxy
 
 the command below pings the application to get a response.
@@ -204,15 +205,17 @@ kubectl rollout status deployment/hello-world
 the command to get more (wide) details for a  Deployment
 kubectl get deployments -o wide
 
+------------------------------------------------------------------------------------------
 
                                 The Kubernetes Ecosystem
 
-The services that are not directly provided by kubernetes but others host and it can be hooked up
-with kubernetes lies under the kubernetes ecosystem.
+The services that are not directly provided by kubernetes but others host and it can be 
+hooked up with kubernetes lies under the kubernetes ecosystem.
 
-"Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services
-that facilitates both declarative configuration and automation. It has large, rapidly growing ecosystem. Kubernetes
-services, support and tools are widely available" -Kubernetes Documentation
+"Kubernetes is a portable, extensible, open-source platform for managing containerized 
+workloads and services that facilitates both declarative configuration and automation. It 
+has large, rapidly growing  ecosystem. Kubernetes services, support and tools are widely 
+available"  -Kubernetes Documentation
 
 things that Kubernetes alone doesn't provide- 
         - building container images
@@ -221,6 +224,7 @@ things that Kubernetes alone doesn't provide-
         - monitoring
         - Continuous Integration and Continuos Deployment
 
+------------------------------------------------------------------------------------------
 
 BIG PICTURE From Cloud Native (cncf.io) Trail Map :- 
 1. Containerize the app
@@ -234,6 +238,7 @@ BIG PICTURE From Cloud Native (cncf.io) Trail Map :-
 9. container registry and runtime
 10. Software Distribution
 
+------------------------------------------------------------------------------------------
 
 OpenShift is a platform that allows us to run containerized applications and workloads with
 kubernetes under the hood. OKD (origin kuberenetes distribution) powers the OpenShift.
@@ -261,6 +266,7 @@ other features.
 |        logging | Chargeback        |     100+ ISV services     | codeready containers  |
 ------------------------------------------------------------------------------------------
 
+
 Similarities between Kubernetes and OpenShift
 - Kubernetes capabilities
 - Container orchestration
@@ -274,8 +280,44 @@ Differences between Kubernetes and OpenShift
                     not that useful UI         has web UI 
                         Deployment          DeploymentConfig
       
+------------------------------------------------------------------------------------------
 
-Continuous Integration - Continuous Deployment is the automation of changes in the codebase to delivery
+Continuous Integration - Continuous Deployment is the automation of changes in the codebase 
+        to delivery
 
-Automatically build, test, and merge →  Automatically release to a repository  →  Automatic deploy
+Automatically build, test, and merge →  Automatically release to a repository  →  Automatic 
+                                                                                deploy
  
+------------------------------------------------------------------------------------------
+
+                                Build
+build is the process of transforming inputs into a resultant objects 
+
+buildconfig is openshift specific object that defines the process for a build to follow.
+buildconfig is a blueprint, build is an instance of buildconfig
+
+------------------------------------------------------------------------------------------
+
+                        Source - to - Image (S2I)
+
+Its a tool for building reproducible container image, offered by openshift
+-- It injects application source into a container to produce a ready-to-run image
+-- Eliminates the need to write a dockerfile
+
+With this feature, we don't need to worry for writing a docker file or even running the 
+build command, we push our code and openshift creates an image for us.
+(GTK) the new image created here uses a builder image (openshift includes a predefined 
+builder image) and the source code.
+- all of this enables us to go from source code to image, saving time and effort
+
+------------------------------------------------------------------------------------------
+
+                        Custom Build
+
+Its similar to S2I but a slightly advanced strategy. 
+-- the user needs to define a builder image
+-- the custom builder images are docker images that contains the logic needed to transform 
+        inputs into the expected output (python package, jar or any other formats of 
+                                resulting object)
+
+------------------------------------------------------------------------------------------
