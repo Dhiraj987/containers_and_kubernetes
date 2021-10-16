@@ -13,6 +13,10 @@ A deployment of kubernetes is called cluster.
 Nodes are working physical or virtual machines in kubernetes. They are managed by control
  panel.
 
+
+------------------------------------------------------------------------------------------
+------------------------------------------------------------------------------------------
+
                                 kubernetes OBJECTS
 These are persistent entities in kubernetes. Once a user defines an object, K8s works to 
 maintain it.
@@ -65,7 +69,7 @@ It opens a vim editor and we can make edits and save them. Once we save them, th
 (i to get to insert mode; esc to get to executive command mode and then :w to write and :q 
                 to exit || :wq for both at once)
 
-
+------------------------------------------------------------------------------------------
 
                                 ReplicaSet
 Replicates pods for redundancy
@@ -80,37 +84,44 @@ We can manually create ReplicaSet by specifying kind: replicaset in the config y
 once we specify the no. of objects in kubernetes, kubernetes works to maintain that at all time, 
 the same applies with replica sets
 
+------------------------------------------------------------------------------------------
 
                                 Autoscaling 
 Horizontal Pod Autoscaler (HPA) enables automatic scaling up and scaling down as needed.
 It can configure on desired state of CPU, memory, etc.
-                        command for autoscale deployment- 
+
+command for autoscale deployment- 
      kubectl autoscale deploy deployment_name --min=2 --max=5 --cpu-percentage=10
-we can also set minReplicas, maxReplicas and targetCPUUtilizationPercentage in the yaml config file
+
+we can also set minReplicas, maxReplicas and targetCPUUtilizationPercentage in the yaml
+         config file
 
 -- Both replicaSet and AutoScaling are important to minimize downtime and service interruptions
 
+------------------------------------------------------------------------------------------
 
-                Rolling updates
+                                        Rolling updates
 
-- Rolling updates are a way to roll out app changes in an automated and controlled fashion throughout 
-        your pods, users can always access the app as rolling updates takes care of everything else
+- Rolling updates are a way to roll out app changes in an automated and controlled fashion 
+        throughout your pods, users can always access the app as rolling updates takes care 
+                of everything else
 - It also allows for rollback when something goes wrong.
 
-Step 1 to adding Rolling updates - add liveness and readiness probes to your deployments. This ensures
-        deployments are marked ready appropriately
+Step 1 to adding Rolling updates - add liveness and readiness probes to your deployments. 
+        This ensures deployments are marked ready appropriately
 Step 2 to  adding Rolling updates - add a rolling update strategy to the yaml config file
         sth like:-          strategy: 
                                 type: RollingUpdate
                                 rollingUpdate:
                                         maxUnavailable: 50%       (50% most be available)
                                         maxSurge: 2               (there can only be 2 extra
-                                                replicas of pod than defined in the config file
+                                             replicas of pod than defined in the config file)
 
-d 
-docker built -t hello_kubernetes .  → creates an image from a dockerfile at the current directory and 
-                        names it hello_kubernetes
-docker tag hello_kubernetes upkar/hello_kubernetes:2.0                  → applies the new tag to the image
+commands:- 
+docker built -t hello_kubernetes .  → creates an image from a dockerfile at the current 
+        directory and names it hello_kubernetes
+
+docker tag hello_kubernetes upkar/hello_kubernetes:2.0    → applies the new tag to the image
 
 docker push upkar/deployment_name:2.0                   → pushes the image to docker registry
 
@@ -118,11 +129,10 @@ kubectl set image deployments/deployment_name deployment_name=upkar/de
 
 kubectl rollout status deployments/deployment_name      → returns the status of the rollout
 
-if the rollout needs to be backed down, rolling updates provides us with an opportunity to do that as 
-well.
-        kubectl rollout undo deployments/deployment_name
+kubectl rollout undo deployments/deployment_name    → if the rollout needs to be backed 
+        down, rolling updates provides us with an opportunity to do that as well.
 
-
+------------------------------------------------------------------------------------------
                 Config maps and Secrets
 
 We avoid hardcoded configuration variables, in docker and kubernetes we do so via 
@@ -140,7 +150,6 @@ secrets do the same but are used for sensitive information
 config maps and secrets are used by deployments just before they are run
 
 command
-
         kubectl create configmap my-config --from-literal=MESSAGE='hello from the config map'
 
 in the config yaml file-
@@ -317,7 +326,8 @@ builder image) and the source code.
 Its similar to S2I but a slightly advanced strategy. 
 -- the user needs to define a builder image
 -- the custom builder images are docker images that contains the logic needed to transform 
-        inputs into the expected output (python package, jar or any other formats of 
+        inputs into the expected output (python package, jar or any other formats for 
                                 resulting object)
 
 ------------------------------------------------------------------------------------------
+
