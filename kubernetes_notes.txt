@@ -207,6 +207,9 @@ kubectl get deployments -o wide
 
                                 The Kubernetes Ecosystem
 
+The services that are not directly provided by kubernetes but others host and it can be hooked up
+with kubernetes lies under the kubernetes ecosystem.
+
 "Kubernetes is a portable, extensible, open-source platform for managing containerized workloads and services
 that facilitates both declarative configuration and automation. It has large, rapidly growing ecosystem. Kubernetes
 services, support and tools are widely available" -Kubernetes Documentation
@@ -217,6 +220,7 @@ things that Kubernetes alone doesn't provide-
         - logging
         - monitoring
         - Continuous Integration and Continuos Deployment
+
 
 BIG PICTURE From Cloud Native (cncf.io) Trail Map :- 
 1. Containerize the app
@@ -229,3 +233,49 @@ BIG PICTURE From Cloud Native (cncf.io) Trail Map :-
 8. streaming and messaging
 9. container registry and runtime
 10. Software Distribution
+
+
+OpenShift is a platform that allows us to run containerized applications and workloads with
+kubernetes under the hood. OKD (origin kuberenetes distribution) powers the OpenShift.
+
+OpenShift builds on Kubernetes, docker (container runtime), OKD, STL, etc. to provide a more 
+comprehensive container platform.
+OpenShift adds developer and operations centric tooling on top of kubernetes
+
+OpenShift offers logging, monitoring, container registry, networking, router, kubevirt and 
+other features. 
+
+                                 OpenShift
+
+------------------------------------------------------------------------------------------
+|               Red Hat Enterprises Linux & Red Hat Enterprise Linux CoreOS              |
+------------------------------------------------------------------------------------------
+|                                       kuberenetes                                      |
+------------------------------------------------------------------------------------------
+|                                        Cluster Services                                |
+| Automated ops | Over-the-air updates | Monitoring | Registry | Networking | OLM | Helm |
+------------------------------------------------------------------------------------------
+|        Platform Services           |    Application Services   |   Developer Services  |
+| Service mesh | Serverless builds   | Databases | Languages     | Developer CLI | IDE   |
+|    CI/CD pipelines | Full Stack    |  Runtimes | Integration   | extensions and plugins|
+|        logging | Chargeback        |     100+ ISV services     | codeready containers  |
+------------------------------------------------------------------------------------------
+
+Similarities between Kubernetes and OpenShift
+- Kubernetes capabilities
+- Container orchestration
+- both are open source
+
+Differences between Kubernetes and OpenShift
+
+                        Kubernetes              OpenShift
+                         Project                 Product 
+                         kubectl                 oc cli
+                    not that useful UI         has web UI 
+                        Deployment          DeploymentConfig
+      
+
+Continuous Integration - Continuous Deployment is the automation of changes in the codebase to delivery
+
+Automatically build, test, and merge →  Automatically release to a repository  →  Automatic deploy
+ 
