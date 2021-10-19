@@ -404,4 +404,48 @@ spec:
   postCommit: 
       script: "bundle exec rake test"
                                         → defines an optional build hook
-                                        
+
+------------------------------------------------------------------------------------------
+                        More information for Triggers
+
+Webhook Triggers→ they allow triggering a new build by sending a request to the OpenShift 
+        Container Platform API endpoint. We can define these triggers via GitHub or Generic webhooks.
+
+GitHub Webhooks → It handles the call made by GitHub when the repository is updated. 
+        → we must specify a secret while using this trigger, which will be part of the URL
+
+Image Change → It updates everytime a new image is available
+        → this is useful for keeping base images up to database
+
+Configuration change → It updates eveytime a new BuildConfig is created
+
+------------------------------------------------------------------------------------------
+
+                        Custom Resource Definitions (CRD)
+
+→ they are extension of the kubernetes api, they make the API more modular and flexible
+→ They can be installed in Clusters
+→ They need to installed by users, and then can be accessed normally using kubectl
+→ They let store and retrieve data
+
+
+Custom controllers (the controlled loop) can interpret the custom resource data stored in the
+APIs as a desired state and work to maintain that state. 
+
+------------------------------------------------------------------------------------------
+
+                                Operators
+
+Combining custom resources and custom controllers creates a true declarative API like Pods, 
+the combination also known as operator pattern. 
+
+An operator is a way to package, deploy, and manage a Kubernetes native application, which is 
+deployed on and managed by Kubernetes. They are mainly used for stateful applications
+
+The goal of operators here is to automate what a human would need to do manually. (Replace 
+human operator with a software operator) All the tasks that a human would do is packed in a 
+program which is made capable of how to deploy, create clusters of replicas, how to recover
+
+It has the same control loop mechanism that Kuberenetes has (observe → check differences 
+                        → take actions)
+
