@@ -300,10 +300,22 @@ Automatically build, test, and merge →  Automatically release to a repository 
 ------------------------------------------------------------------------------------------
 
                                 Build
-build is the process of transforming inputs into a resultant objects 
+build is the process of transforming source code into a runnable container image. 
 
 buildconfig is openshift specific object that defines the process for a build to follow.
 buildconfig is a blueprint, build is an instance of buildconfig
+
+OpenShift supports Docker Build, Source-to-Image, custom build, etc. for build strategies.
+
+The resulting object of a build depends on the builder used to create it. For Docker and 
+S2I builds, the resulting objects are runnable images. For Custom builds, the resulting 
+objects are whatever the builder image author has specified.
+
+------------------------------------------------------------------------------------------
+                                Docker Build
+
+Docker build strategies invokes the docker build command, and it expects a repo with a
+Dockerfile and all other artifacts in it to produce a runnable image
 
 ------------------------------------------------------------------------------------------
 
@@ -319,9 +331,11 @@ build command, we push our code and openshift creates an image for us.
 builder image) and the source code.
 - all of this enables us to go from source code to image, saving time and effort
 
+(GTK) S2I re-uses previously downloaded dependencies, artifacts, etc. 
+
 ------------------------------------------------------------------------------------------
 
-                        Custom Build
+                                Custom Build
 
 Its similar to S2I but a slightly advanced strategy. 
 -- the user needs to define a builder image
@@ -331,3 +345,45 @@ Its similar to S2I but a slightly advanced strategy.
 
 ------------------------------------------------------------------------------------------
 
+                                BuildConfig
+
+A BuildConfig object is the definition of the entire build process. A build configuration 
+describes a build definition and a set of triggers for when a new build is created. 
+Such configurations are defined by BuildConfig which is a REST object that can be used 
+in a POST to the API server to create a new instance.
+
+Sample BuildConfig File:
+
+kind: BuildConfig
+apiVersion: build.openshift.io/v1
+metadata:
+  name: "ruby-sample-build"     → This specification creates a new BuildConfig named ruby-sample-build.
+spec:
+  runPolicy: "Serial"                  → The runPolicy field controls whether builds created
+                                           from this build configuration can be run simultaneously.
+                                              The default value is Serial, which means new builds run
+                                                 sequentially, not simultaneously
+  triggers: 
+    -
+      type: "GitHub"
+      github:
+        secret: "secret101"
+    - type: "Generic"
+      generic:
+        secret: "secret101"
+    -
+      type: "ImageChange"
+  source: 
+    git:
+      uri: "https://github.com/openshift/ruby-hello-world"
+  strategy: 
+    sourceStrategy:
+      from:
+        kind: "ImageStreamTag"
+        name: "ruby-20-centos7:latest"
+  output: 
+    to:
+      kind: "ImageStreamTag"
+      name: "origin-ruby-sample:latest"
+  postCommit: 
+      script: "bundle exec rake test"
