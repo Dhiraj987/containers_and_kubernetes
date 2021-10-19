@@ -357,12 +357,16 @@ Sample BuildConfig File:
 kind: BuildConfig
 apiVersion: build.openshift.io/v1
 metadata:
-  name: "ruby-sample-build"     → This specification creates a new BuildConfig named ruby-sample-build.
+  name: "ruby-sample-build"     → This specification creates a new BuildConfig named 
+                                        ruby-sample-build.
+
 spec:
   runPolicy: "Serial"                  → The runPolicy field controls whether builds created
-                                           from this build configuration can be run simultaneously.
-                                              The default value is Serial, which means new builds run
-                                                 sequentially, not simultaneously
+                                           from this build configuration can be run 
+                                              simultaneously. The default value is Serial, 
+                                                which means new builds run sequentially, 
+                                                    not simultaneously
+  
   triggers: 
     -
       type: "GitHub"
@@ -372,18 +376,32 @@ spec:
       generic:
         secret: "secret101"
     -
-      type: "ImageChange"
+      type: "ImageChange"               → all the triggers that should create a build is 
+                                                defined here
+  
   source: 
     git:
       uri: "https://github.com/openshift/ruby-hello-world"
+                                        → this defines the primary input source of the build,
+                                            it could be Git, pointer to a repository, 
+                                                a dockerfile, a Binary, etc.
+
   strategy: 
     sourceStrategy:
       from:
         kind: "ImageStreamTag"
         name: "ruby-20-centos7:latest"
+                                        → this defines the build strategy used to execute the
+                                            build. here source to image strategy is used
+
   output: 
     to:
       kind: "ImageStreamTag"
       name: "origin-ruby-sample:latest"
+                                        → once the image is built using the strategy above, 
+                                            the output is pushed to the repository described here
+
   postCommit: 
       script: "bundle exec rake test"
+                                        → defines an optional build hook
+                                        
