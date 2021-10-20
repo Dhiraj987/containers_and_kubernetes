@@ -449,3 +449,79 @@ program which is made capable of how to deploy, create clusters of replicas, how
 It has the same control loop mechanism that Kuberenetes has (observe → check differences 
                         → take actions)
 
+                    ---------------------------------
+
+kubernetes can manage the complete lifecycles of stateless applications
+but they can't do that for stateful apps (databases, etc.), which is why need OPERATORS
+
+                        we can also automate other tasks. 
+
+------------------------------------------------------------------------------------------
+
+                                Sidecar proxy
+
+→ Microservices are a cloud-native architectural approach in which a single application is 
+        composed of many loosely coupled and independently deployable smaller components, or services. 
+
+→ Microservices have well-defined APIs for communicating with each other. 
+
+→ They make it easier to update code because only the relevant service
+        needs to be updated, not the entire application. 
+
+→ They allow teams that develop different components of an application to use different 
+        technology stacks as needed for each component. 
+
+→ When the application is running, components that experience more load can be scaled 
+        independently, preventing the entire application from needing to be scaled when only 
+        one component requires more resources.
+
+
+For all these reasons, when the microservices communicate with one another, the 
+communication need to be secure, which is where service mesh comes into play. service 
+mesh manages communication between microservices.
+
+→ They are a collection of security, retry, metric, tracing, etc. logics that are set up on 
+top of the the actual business logic in each Pod or microservices. This saves time and makes 
+it easy to configure apps
+
+------------------------------------------------------------------------------------------
+
+                                Istio
+
+Canary Deployment/ Webserver allows specific traffic to specific service versions.
+For instance, we can send 10% to the new version of service whereas 80% to the older
+
+Istio is a commonly used platform independent service mesh. Istio secures services through 
+authentication, authorization, and encryption
+
+Consider an application with 3 services (UI) (Ordering) (Inventory). Say the team working on 
+Inventory makes some version upgrades, they can divert the incoming requests into the two 
+available versions as seen fit. It also helps in testing and performance.
+
+Istio also provides encryption for microservices while communicating. It can help block
+communications among two microservices that shouldn't be communication.
+
+
+openshift (oc) comes with a copy of kubectl and so all the kubectl commands can run with oc
+        oc get pods
+        oc get buildconfigs
+        oc get projects  --> opens OpenShift project that is currently in use.
+
+The four services that a openshift deployment has running 
+        - A pod (runs the containerized application)
+        - A build (to build the application into a running container)
+        - A service (exposes the application as a network service)
+        - A route (provides an externally reachable hostname)
+
+in source to image build strategy
+        - The repository is cloned
+        - a Dockerfile is generated
+        - an image is built
+        - and the image is pushed to the internal registry
+
+Image Streams are only pointers to image, they were introduced to facilitate image management
+
+The Cloud Native Computing Foundation hosts Kubernetes and all the tols in the Kubernetes ecosystem.
+
+------------------------------------------------------------------------------------------
+
